@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Department {
+  CSE
+  ECE
+  ME
+  CE
+  EE
+}
+
+enum Course{
+  BTech
+  MTech
+  PhD
+}
+
+enum Days{
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+
+
+model Student {
+  enrollment_no String @id @default(cuid())
+  name          String
+  password      String
+  email         String @unique
+  dept          Department
+  semester      Int
+  year          Int
+  course        Course
+
+  absentees     Absentees[]
+
+  @@index([enrollment_no])
+}
+
+model Teacher {
+  id            String  @id @default(cuid()) @unique
+  name          String
+  dept          Department
+  password      String
+  email         String @unique
+  teaches       Teaches[]
+
+  
+  @@index([id])
+}
+
+model Courses{
+  course_code   String  @id @default(cuid())
+  course_name   String
+
+  teaches       Teaches[]
+
+  @@index([course_code])
+}
+
+model Teaches{
+  id            String  @id @default(cuid())
+  teacher_id    String
+  course_code   String
+  semester      Int
+  dept          Department @default(CSE)
+
+  teacher       Teacher @relation(fields: [teacher_id], references: [id])
+  course        Courses @relation(fields: [course_code], references: [course_code])
+
+  timetable     Timetable[]
+  absentees     Absentees[]
+
+  @@index([teacher_id])
+  @@index([course_code])
+}
+
+model Timetable{
+  teaches_id   String
+  day          Days
+  start        String
+  end          String
+  room_no      String @default("TBA")
+
+  teaches      Teaches @relation(fields: [teaches_id], references: [id])
+
+  @@id([teaches_id, day, start])
+}
+
+model Nonworkingdays{
+  date         DateTime @id
+  day          Days
+  description  String
+
+  @@index([date])
+}
+
+model Absentees{
+  enrollment_no String
+  teaches_id   String
+  date         DateTime
+
+  student      Student @relation(fields: [enrollment_no], references: [enrollment_no])
+  teaches     Teaches @relation(fields: [teaches_id], references: [id])
+
+  @@id([enrollment_no, teaches_id , date])
+  @@index([enrollment_no])
+}
