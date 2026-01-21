@@ -22,7 +22,6 @@ export const authOptions: AuthOptions = {
                             password: credentials.password,
                         },
                     });
-                    console.log("Found teacher: ", teacher);
                     if (teacher) {
                         return {
                             id: teacher.id,

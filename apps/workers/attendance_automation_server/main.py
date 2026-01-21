@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from insightface.app import FaceAnalysis
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
@@ -79,17 +80,22 @@ def recognize_attendance(year, branch, class_id, teacher_id, image_path=None):
     # Filter out "Unknown" students
     present_students = {student for student in recognized_students if student != "Unknown"}
 
-    if present_students:
-        filepath = save_attendance_json(present_students, class_id, teacher_id, ATTENDANCE_LOGS_DIR)
-        logger.info(f"Attendance logged for {len(present_students)} students: {sorted(present_students)}")
+    # Calculate absent students: all in id_map minus present
+    absent_students = set(id_map) - present_students
+
+    if absent_students:
+        filepath = save_attendance_json(absent_students, class_id, teacher_id, ATTENDANCE_LOGS_DIR)
+        logger.info(f"Absentees logged for {len(absent_students)} students: {sorted(absent_students)}")
         logger.info(f"Attendance record saved to: {filepath}")
+        # Print absentees to stdout for the worker to capture
+        print(json.dumps({"absentees": sorted(list(absent_students))}))
         # Delete the input image after processing
         if os.path.exists(image_path):
             os.remove(image_path)
             logger.info(f"Input image deleted: {image_path}")
         return filepath
     else:
-        logger.info("No students recognized in the image.")
+        logger.info("No absentees found (all students present).")
         return None
 
 def main():

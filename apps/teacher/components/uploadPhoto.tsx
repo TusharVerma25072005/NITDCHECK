@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Camera } from "lucide-react";
 
-export default function UploadClassPhoto( {teachesId , date , dept , semester } : {teachesId: string , date?: string , dept?: string , semester : number  } ) {
+export default function UploadClassPhoto( {teachesId , date , dept , semester, CourseName } : {teachesId: string , date?: string , dept?: string , semester : number , CourseName: string } ) {
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +19,7 @@ export default function UploadClassPhoto( {teachesId , date , dept , semester } 
     formData.append("year", (Math.ceil(semester/2)).toString() || "");
     formData.append("file", file);
     formData.append("teachesId", teachesId);
+    formData.append("name", CourseName);
     async function upload() {
       const response = await fetch('/api/upload', {
         method: 'POST',
@@ -29,7 +30,6 @@ export default function UploadClassPhoto( {teachesId , date , dept , semester } 
       }
     }
     upload();
-    console.log("Uploading file:", file);
   }
 
   return (

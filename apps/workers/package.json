@@ -11,8 +11,10 @@
   "dependencies": {
     "@repo/database": "*",
     "@repo/queue": "*",
+    "@types/nodemailer": "^7.0.5",
     "bullmq": "^5.66.2",
-    "ioredis": "^5.8.2"
+    "ioredis": "^5.8.2",
+    "nodemailer": "^7.0.12"
   },
   "devDependencies": {
     "@types/node": "^20.4.2",

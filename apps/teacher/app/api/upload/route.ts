@@ -8,6 +8,8 @@ export async function POST(req : Request){
     const teachesId = data.get('teachesId') as string;
     const branch = data.get('dept') as string;
     const year = data.get('year') as string;
+    const name = data.get('name') as string;
+    console.log(name)
     if(!file || !teachesId || !branch || !year){
         return new Response('Missing parameters ', {status: 400});
     }
@@ -15,7 +17,7 @@ export async function POST(req : Request){
     const todayStr = today.toISOString().split('T')[0];
     const byteData = await file.arrayBuffer();
     const buffer = Buffer.from(byteData);
-    // Save uploads into the attendance_automation_server images folder
+
     const imagesDir = path.join(
         'D:',
         'Projects',
@@ -32,13 +34,14 @@ export async function POST(req : Request){
     await writeFile(currPath, buffer);
     
 
-    await imageQueue.add('image-processing', {
-        TId : teachesId,
-        branch  : branch,
-        year : year,
-        date: todayStr,
-        filePath: currPath
-    });
+    // await imageQueue.add('image-processing', {
+    //     TId : teachesId,
+    //     branch  : branch,
+    //     year : year,
+    //     date: todayStr,
+    //     filePath: currPath,
+    //     name : name
+    // });
 
     // console.log(`Enqueued image processing job for teachesId: ${teachesId} on date: ${todayStr}`);
     return new Response('File uploaded successfully', {status: 200});

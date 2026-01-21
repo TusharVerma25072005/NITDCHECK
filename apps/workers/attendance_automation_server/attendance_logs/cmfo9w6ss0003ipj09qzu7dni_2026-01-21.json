@@ -1,8 +1,8 @@
 {
-    "timestamp": "2026-01-21T11:59:46",
+    "timestamp": "2026-01-21T14:28:27",
     "class_id": "cmfo9w6ss0003ipj09qzu7dni",
     "teacher_id": "cmfo9w6ss0003ipj09qzu7dni",
-    "present_students": [
+    "absent_students": [
         "231210113"
     ]
 }

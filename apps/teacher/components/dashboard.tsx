@@ -31,14 +31,12 @@ interface ClassData {
 
 export default function TeacherPortal({ teacherId }: { teacherId: string }) {
   const [classes, setClasses] = useState<ClassData[]>([]);
-
   const [selectedClass, setSelectedClass] = useState<ClassData>(classes[0]!);
   const [selectedAction, setSelectedAction] = useState<string>("Upload Photo");
 
   useEffect(() => {
     async function fetchData() {
       const data = await getData({ teacherId });
-      console.log("Fetched data:", data);
       setClasses(data);
       setSelectedClass(data[0] || selectedClass);
     }
@@ -119,6 +117,7 @@ export default function TeacherPortal({ teacherId }: { teacherId: string }) {
             semester={selectedClass.semester}
             teachesId={selectedClass.teachesId}
             date={new Date().toISOString().split("T")[0]}
+            CourseName={selectedClass.courseName}
           />
         )}
         {selectedAction === "View Attendance" && (
