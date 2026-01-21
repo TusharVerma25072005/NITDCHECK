@@ -29,19 +29,19 @@ export async function POST(req : Request){
         'images'
     );
     await mkdir(imagesDir, { recursive: true });
-    const filename = `${teachesId}-${todayStr}.png`;
+    const filename = `${teachesId}-${todayStr}-${Math.floor(Math.random()*100)}.png`;
     const currPath = path.join(imagesDir, filename);
     await writeFile(currPath, buffer);
     
 
-    // await imageQueue.add('image-processing', {
-    //     TId : teachesId,
-    //     branch  : branch,
-    //     year : year,
-    //     date: todayStr,
-    //     filePath: currPath,
-    //     name : name
-    // });
+    await imageQueue.add('image-processing', {
+        TId : teachesId,
+        branch  : branch,
+        year : year,
+        date: todayStr,
+        filePath: currPath,
+        name : name
+    });
 
     // console.log(`Enqueued image processing job for teachesId: ${teachesId} on date: ${todayStr}`);
     return new Response('File uploaded successfully', {status: 200});
