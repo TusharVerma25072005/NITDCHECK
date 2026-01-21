@@ -2,7 +2,8 @@ import { spawn } from "child_process";
 import fs from "fs";
 import path from "path";
 
-const WORKER_COUNT = 4;
+const WORKER_COUNT =  Number(process.env.NUM_WORKERS) || 4;
+//change as needed
 
 for (let i = 0; i < WORKER_COUNT; i++) {
   const worker = spawn(

@@ -37,7 +37,9 @@ NITDCheck is a comprehensive attendance management system designed for National 
 - **Responsive Design**: Mobile-friendly web interfaces with Tailwind CSS
 - **Type-Safe Development**: Full TypeScript implementation with strict mode
 - **Monorepo Architecture**: Efficient code sharing with Turborepo
-- **Horizontal Scaling**: Multiple worker instances for high-throughput processing
+- **Horizontal Scaling**: NITDCheck uses a **custom Node.js process-spawning script** to scale background workers horizontally.
+
+Instead of relying on external process managers, the system manually spawns multiple Node.js worker processes, allowing fine-grained control over worker behavior, logging, and development workflows.
 
 ## 🏗️ System Architecture
 
@@ -227,20 +229,6 @@ cd apps/workers
 npm run dev  # Runs index.ts with tsx watch
 ```
 
-#### Multiple Workers (Production Scaling)
-```bash
-cd apps/workers
-
-# Start 3 workers (default)
-npm run workers
-
-# Start custom number of workers
-NUM_WORKERS=5 node start-workers.js
-
-# Manual scaling
-node start-workers.js  # Uses NUM_WORKERS env var
-```
-
 #### Scaling Architecture
 
 The `start-workers.js` script provides:
@@ -250,10 +238,6 @@ The `start-workers.js` script provides:
 - **Graceful Shutdown**: Ctrl+C stops all workers cleanly
 - **Centralized Logging**: All worker logs prefixed with worker ID
 
-**Scaling Formula:**
-- 1 worker = 4 concurrent jobs
-- 3 workers = 12 concurrent jobs
-- N workers = 4×N concurrent jobs
 
 ### Building for Production
 
@@ -362,9 +346,7 @@ IMAGES_DIR = "images"
 ### Worker Scaling Configuration
 
 ```javascript
-// In start-workers.js
-const NUM_WORKERS = process.env.NUM_WORKERS || 3;  // Scale as needed
-const RESTART_DELAY = 5000;  // Auto-restart delay in ms
+Worker scaling is controlled manually via a custom script.
 ```
 
 ## 📈 API Endpoints
@@ -399,21 +381,6 @@ npx turbo test --filter=teacher
 
 # Build verification
 npm run build
-```
-
-## 🚀 Deployment
-
-### Docker Deployment (Recommended)
-
-```bash
-# Build all services
-docker-compose build
-
-# Start production stack
-docker-compose up -d
-
-# Scale workers
-docker-compose up -d --scale workers=5
 ```
 
 ### Manual Deployment
@@ -483,10 +450,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support and questions:
 - Create an issue on GitHub with detailed information
 - Check existing documentation and troubleshooting guides
-- Contact the NITD development team for institutional support
 
 ---
 
-**Built with ❤️ for National Institute of Technology Delhi**
 
 *Empowering education through technology and AI-driven automation*
