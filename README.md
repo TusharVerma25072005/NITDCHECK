@@ -487,6 +487,5 @@ For support and questions:
 
 ---
 
-**Built with ❤️ for National Institute of Technology Delhi**
 
 *Empowering education through technology and AI-driven automation*
