@@ -24,7 +24,7 @@ NITDCheck is a comprehensive attendance management system designed for National 
 - **Multi-class Management**: Handle multiple courses and sections efficiently
 - **Bulk Email Notifications**: Automated email alerts for absent students
 
-### AI-Powered Automation
+### AI-Powered
 - **Face Recognition**: Advanced face detection using InsightFace with buffalo_l model
 - **Efficient Search**: FAISS vector database for fast similarity matching
 - **Batch Processing**: Handle large class photos with optimized performance
